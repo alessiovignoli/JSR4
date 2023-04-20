@@ -1,0 +1,23 @@
+#stuff not needed for commits
+
+.DS_Store
+.nextflow.log*
+.nextflow.pid
+.nextflow/
+/results*/
+/test*
+/data*/
+/work/
+/*.png
+/*.csv
+/*.pdf
+/*.sif
+/*.tab
+/*.txt
+/bin/pylib/__pycache__/
+/bin/__pycache__/
+/singularity_cache/
+./metainfo/
+*ipynb_checkpoints
+*luisa*
+summary.mmd
