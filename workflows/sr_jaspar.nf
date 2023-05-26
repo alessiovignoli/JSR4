@@ -50,7 +50,7 @@ workflow  sr_input_handler {
 
 	emit:
 	final_out = final_out
-	stdout = sr_prediction.out.standardout
+	stdout = sprql_querier.out.stout
 }
 
 

@@ -46,13 +46,25 @@ def pdb_SPARQL_query(in_file, out_file, column_num, col_spatiator, skip_1line):
             all_info = g.serialize(format="turtle").split('\n')
 
             # Scan all the fields retrieved for the one of interest(no need for this step if the query was precise)
+            # Series of checks on different lines because the pattern to identify the information is quite complicated
+            # it is also complicated by the need to filter out non x-ray structures
+            isoforms_check = False
+            tmp_dict = {}
+            buffer_line = ''
             for rdf_line in all_info:
                 if 'isoforms' in rdf_line and 'PDB' in rdf_line and ';' not in rdf_line:
-                    pdbID = rdf_line.split('#PDB_')[1].split('_')[0]
+                    pdbID =  rdf_line.split('#PDB_')[1].split('_')[0]
                     chain = rdf_line.split('"')[1].split('=')[0]
                     extremities = rdf_line.split('=')[1].split('"')[0]
-                    to_be_written += (uniprotID + '\t' + pdbID + '\t' + chain + '\t' + extremities + '\n')
-
+                    tmp_dict[pdbID] = (chain, extremities)
+                if rdf_line ==  '\n':
+                    isoforms_check = False
+                elif 'isoforms' in rdf_line:
+                    isoforms_check = True
+                    buffer_line = rdf_line
+                elif 'X-Ray' in rdf_line and isoforms_check:
+                    x_ray_pdbID = buffer_line.split('#PDB_')[1].split('_')[0]
+                    to_be_written += (uniprotID + '\t' + x_ray_pdbID + '\t' + tmp_dict[x_ray_pdbID][0] + '\t' + tmp_dict[x_ray_pdbID][1] + '\n')
     # Write to file if the option has been given
     if out_file:
         with open(out_file, 'w') as outfile:
