@@ -54,7 +54,7 @@ def pdb_SPARQL_query(in_file, out_file, column_num, col_spatiator, skip_1line):
             for rdf_line in all_info:
 
                 # first retrieving all structure informations associated to such uniprot entry
-                if 'isoforms' in rdf_line and 'PDB' in rdf_line and ';' not in rdf_line:
+                if 'isoforms' in rdf_line and 'PDB' in rdf_line and ';' not in rdf_line and ' :chain ' in rdf_line:
                     pdbID =  rdf_line.split('#PDB_')[1].split('_')[0]
                     chain = rdf_line.split('"')[1].split('=')[0]
                     extremities = rdf_line.split('=')[1].split('"')[0]
