@@ -52,11 +52,18 @@ def pdb_SPARQL_query(in_file, out_file, column_num, col_spatiator, skip_1line):
             tmp_dict = {}
             buffer_line = ''
             for rdf_line in all_info:
+
+                # first retrieving all structure informations associated to such uniprot entry
                 if 'isoforms' in rdf_line and 'PDB' in rdf_line and ';' not in rdf_line:
                     pdbID =  rdf_line.split('#PDB_')[1].split('_')[0]
                     chain = rdf_line.split('"')[1].split('=')[0]
                     extremities = rdf_line.split('=')[1].split('"')[0]
                     tmp_dict[pdbID] = (chain, extremities)
+
+                # The following block access the pdb information about type of structure like NMR or x-ray ecc.
+                # if the strucure is x-ray then it is selected and outputted
+                # since the information is on more then one line first the pdb ID has to retrieved once more to make a connection with the dictionary above
+                # then x-ray is checked and the pdb id selected in case and then the flags resetted in order to check a new pdb block in the rdf 
                 if rdf_line ==  '\n':
                     isoforms_check = False
                 elif 'isoforms' in rdf_line:
@@ -64,7 +71,12 @@ def pdb_SPARQL_query(in_file, out_file, column_num, col_spatiator, skip_1line):
                     buffer_line = rdf_line
                 elif 'X-Ray' in rdf_line and isoforms_check:
                     x_ray_pdbID = buffer_line.split('#PDB_')[1].split('_')[0]
-                    to_be_written += (uniprotID + '\t' + x_ray_pdbID + '\t' + tmp_dict[x_ray_pdbID][0] + '\t' + tmp_dict[x_ray_pdbID][1] + '\n')
+                    
+                    # filtering out short structures, like protein complexes where the interested protein is just a fragment of few aa
+                    if (int((tmp_dict[x_ray_pdbID][1]).split('-')[1]) - int((tmp_dict[x_ray_pdbID][1]).split('-')[0])) > 15:
+                        to_be_written += (uniprotID + '\t' + x_ray_pdbID + '\t' + tmp_dict[x_ray_pdbID][0] + '\t' + tmp_dict[x_ray_pdbID][1] + '\n')
+
+
     # Write to file if the option has been given
     if out_file:
         with open(out_file, 'w') as outfile:
