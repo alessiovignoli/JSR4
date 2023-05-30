@@ -43,7 +43,7 @@ workflow  sr_input_handler {
 	
 	// let's add the header line
 
-	header = Channel.of("Query\tTF Name\tTF Matrix\tE-value\tQuery Start-End\tTF Start-End\tDBD\t%ID\tref uniprotID\tpdbID\tchain\tStructure Start-End")
+	header = Channel.of("Query\tTF Name\tTF Matrix\tE-value\tQuery Start-End\tTF Start-End\tDBD\t%ID\tJoint-coverage\tref uniprotID\tpdbID\tchain\tStructure Start-End")
 	matched_lines.map{ it -> [it[1], it[2]].join("\t") }.set{ tmp }
 	header.concat(tmp).collectFile(name: outname_path, storeDir: params.OUTPUT_DIR, newLine: true, sort: false).set{ final_out }
 	
