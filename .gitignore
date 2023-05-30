@@ -19,6 +19,6 @@
 /singularity_cache/
 ./metainfo/
 *ipynb_checkpoints
-*luisa*
 summary.mmd
 /log*/
+/images/
