@@ -39,10 +39,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # copying the actual git repo of sr jaspar
-# and modifying with sed the lines to print uniprot id 
+# and modifying with sed the lines to print uniprot id and joint coverage vaule 
 WORKDIR /usr/local/
 RUN git clone https://github.com/wassermanlab/JASPAR-inference-tool.git \
 	&& cd JASPAR-inference-tool/ \ 
 	&& git checkout a1c98d5620eb797aca58c2d1bc1c84937979279b \
-	&& sed -i '118s/ID"]/ID", "ref UniprotID"]/' infer_profile.py \
-	&& sed -i '253s/, 3)]/, 3), r[1]]/' infer_profile.py
+	&& sed -i '118s/ID"]/ID", "Joint-coverage", "ref UniprotID"]/' infer_profile.py \
+	&& sed -i '253s/, 3)]/, 3), r[-1], r[1]]/' infer_profile.py

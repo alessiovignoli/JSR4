@@ -3,7 +3,7 @@
 
 // Modules dependencie section
 
-include { sprql_querier } from "../subworkflows/uniprot_sparql" addParams(column_UN: 8)
+include { sprql_querier } from "../subworkflows/uniprot_sparql" addParams(column_UN: 9)
 include { sr_prediction } from "../modules/sr_jasper_pred"
 
 
