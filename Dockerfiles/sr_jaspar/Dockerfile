@@ -48,4 +48,4 @@ RUN git clone https://github.com/wassermanlab/JASPAR-inference-tool.git \
 	&& sed -i '118s/ID"]/ID", "SR_score", "ref UniprotID"]/' infer_profile.py \
 	&& sed -i '242s/_, Classification /SR_score, Classification /' infer_profile.py \
 	&& sed -i '253s/, 3)]/, 3), str(SR_score)[0:5], r[1]]/' infer_profile.py \
-	&& sed -i '257s/(x\[3\], x\[1\], float(x\[2\]\[2:\]))/(float(x[-2]), x[1], float(x[2][2:]), reverse=True)/' infer_profile.py
+	&& sed -i '257s/(x\[3\], x\[1\], float(x\[2\]\[2:\])))/(float(x[-2]), x[1], float(x[2][2:])), reverse=True)/' infer_profile.py
