@@ -38,14 +38,8 @@ RUN apt-get update \
     && apt-get purge \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# copying the actual git repo of sr jaspar
-# and modifying with sed the lines to print uniprot id and Similarity Regression score
-# ordering the results then using such value 
+# copying the forked git repo of sr jaspar
 WORKDIR /usr/local/
-RUN git clone https://github.com/wassermanlab/JASPAR-inference-tool.git \
-	&& cd JASPAR-inference-tool/ \ 
-	&& git checkout a1c98d5620eb797aca58c2d1bc1c84937979279b \
-	&& sed -i '118s/ID"]/ID", "SR_score", "ref UniprotID"]/' infer_profile.py \
-	&& sed -i '242s/_, Classification /SR_score, Classification /' infer_profile.py \
-	&& sed -i '253s/, 3)]/, 3), str(SR_score)[0:5], r[1]]/' infer_profile.py \
-	&& sed -i '257s/(x\[3\], x\[1\], float(x\[2\]\[2:\])))/(float(x[-2]), x[1], float(x[2][2:])), reverse=True)/' infer_profile.py
+RUN git clone https://github.com/alessiovignoli/JASPAR-SR.git \
+	&& cd JASPAR-SR/ \
+	&& git checkout 1254e29395882a051889ae303764a1f137cffef4
