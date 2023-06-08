@@ -16,6 +16,7 @@ class TabularLine():
         self.string = string
         self.delimiter = delimiter
 
+        #usefull for debug
         if check_type:
             err_message1 = StrTypeErr(self.string, 'TabularLine.string')
             err_message1.Asses_Type()
@@ -33,6 +34,7 @@ class ExtractField(TabularLine):
         super().__init__(string, delimiter, check_type)
         self.position = position
 
+        #usefull for debug
         if check_type:
             err_mssg_pos = IntTypeErr(self.position, 'ExtractField.position')
             err_mssg_pos.Asses_Type()

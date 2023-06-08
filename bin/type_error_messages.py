@@ -2,6 +2,8 @@
 
 from sys import exit
 from sys import stderr
+from abc import ABC, abstractmethod
+
 
 class TypeErrorMessage():
     """
@@ -9,9 +11,9 @@ class TypeErrorMessage():
     all subclass of this one should be variable type specific and they should be composed instead of inherited
     """
 
+    @abstractmethod
     def Asses_Type(self):
-        print('This error type is not yet implemented as a class\nplease do so yourself')
-        exit(1)
+        pass
 
 
 class StrTypeErr(TypeErrorMessage):
