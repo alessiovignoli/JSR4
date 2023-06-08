@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 from type_error_messages import StrTypeErr
+from type_error_messages import IntTypeErr
+
+
 
 class TabularLine():
     """
@@ -12,9 +15,10 @@ class TabularLine():
     def __init__(self, string, delimiter='\t') -> None:
         self.string = string
         self.delimiter = delimiter
-        self.err_message = StrTypeErr(self.string)
-        self.err_message.Asses_Type()
-        #print(self.err_message)
+        err_message1 = StrTypeErr(self.string, 'TabularLine.string')
+        err_message1.Asses_Type()
+        err_message2 = StrTypeErr(self.delimiter, 'TabularLine.delimiter')
+        err_message2.Asses_Type()
 
 
   
@@ -26,7 +30,8 @@ class ExtractField(TabularLine):
     def __init__(self, string, position, delimiter='\t') -> None:
         super().__init__(string, delimiter)
         self.position = position
-        
+        err_mssg_pos = IntTypeErr(self.position, 'ExtractField.position')
+        err_mssg_pos.Asses_Type()
     
     def Get_Field(self):
         return (self.string.split(self.delimiter)[self.position])

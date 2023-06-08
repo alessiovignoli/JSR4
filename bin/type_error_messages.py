@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from sys import exit
+from sys import stderr
 
 class TypeErrorMessage():
     """
@@ -15,11 +16,23 @@ class TypeErrorMessage():
 
 class StrTypeErr(TypeErrorMessage):
 
-    def __init__(self, variable) -> None:
+    def __init__(self, variable, variable_name) -> None:
         self.variable = variable
+        self.variable_name = variable_name
 
     def Asses_Type(self):
         if not isinstance(self.variable, str):
-            print('not the correct datat type')
+            print(self.variable_name, ' variable is not the correct dataset type: string   given :', self.variable, '  type:', type(self.variable), file=stderr)
             exit(1)
-        #return isinstance(self.variable, str)
+
+
+class IntTypeErr(TypeErrorMessage):
+
+    def __init__(self, variable, variable_name) -> None:
+        self.variable = variable
+        self.variable_name = variable_name
+
+    def Asses_Type(self):
+        if not isinstance(self.variable, int):
+            print(self.variable_name, ' variable is not the correct dataset type: integer   given :', self.variable, '  type:', type(self.variable), file=stderr)
+            exit(1)
