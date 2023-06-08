@@ -12,13 +12,15 @@ class TabularLine():
     It by default checks if the two input are of the correct type -> both string type
     """
 
-    def __init__(self, string, delimiter='\t') -> None:
+    def __init__(self, string, delimiter='\t', check_type=False) -> None:
         self.string = string
         self.delimiter = delimiter
-        err_message1 = StrTypeErr(self.string, 'TabularLine.string')
-        err_message1.Asses_Type()
-        err_message2 = StrTypeErr(self.delimiter, 'TabularLine.delimiter')
-        err_message2.Asses_Type()
+
+        if check_type:
+            err_message1 = StrTypeErr(self.string, 'TabularLine.string')
+            err_message1.Asses_Type()
+            err_message2 = StrTypeErr(self.delimiter, 'TabularLine.delimiter')
+            err_message2.Asses_Type()
 
 
   
@@ -27,11 +29,13 @@ class ExtractField(TabularLine):
     extracts and returns the requested field from the line
     """
 
-    def __init__(self, string, position, delimiter='\t') -> None:
-        super().__init__(string, delimiter)
+    def __init__(self, string, position, delimiter='\t', check_type=False) -> None:
+        super().__init__(string, delimiter, check_type)
         self.position = position
-        err_mssg_pos = IntTypeErr(self.position, 'ExtractField.position')
-        err_mssg_pos.Asses_Type()
+
+        if check_type:
+            err_mssg_pos = IntTypeErr(self.position, 'ExtractField.position')
+            err_mssg_pos.Asses_Type()
     
     def Get_Field(self):
         return (self.string.split(self.delimiter)[self.position])
