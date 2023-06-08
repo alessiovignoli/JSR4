@@ -5,7 +5,7 @@ from sys import stderr
 from abc import ABC, abstractmethod
 
 
-class TypeErrorMessage():
+class TypeErrorMessage(ABC):
     """
     This is a helper class for error type messages that will be used by other classes for sending error type messages 
     all subclass of this one should be variable type specific and they should be composed instead of inherited

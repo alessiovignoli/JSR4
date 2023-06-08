@@ -4,7 +4,6 @@ from type_error_messages import StrTypeErr
 from type_error_messages import IntTypeErr
 
 
-
 class TabularLine():
     """
     tabular specific helper functions are stored in this class, it is meant to work on strings instead of files.
@@ -24,10 +23,10 @@ class TabularLine():
             err_message2.Asses_Type()
 
 
-  
-class ExtractField(TabularLine):
+
+class Extract(TabularLine):
     """
-    extracts and returns the requested field from the line
+    subclass parent to all extract types functions
     """
 
     def __init__(self, string, position, delimiter='\t', check_type=False) -> None:
@@ -39,6 +38,39 @@ class ExtractField(TabularLine):
             err_mssg_pos = IntTypeErr(self.position, 'ExtractField.position')
             err_mssg_pos.Asses_Type()
     
+
+
+  
+class ExtractField(Extract):
+    """
+    extracts and returns the requested field from the line
+    """
+
+    def __init__(self, string, position, delimiter='\t', check_type=False) -> None:
+        super().__init__(string, position, delimiter, check_type)
+    
     def Get_Field(self):
         return (self.string.split(self.delimiter)[self.position])
-   
+    
+
+
+class ExtractAllButField(Extract):
+    """
+    extracts the whole line except the field asked, is basically a special case of slice.
+    It can return a string (default) or a list as output.
+    """
+
+    def __init__(self, string, position, delimiter='\t', check_type=False) -> None:
+        super().__init__(string, position, delimiter, check_type)
+
+    # return the string
+    def Remove_str(self):
+        l = self.string.split(self.delimiter)
+        l.pop(self.position)
+        return self.delimiter.join(l)
+    
+    # returns the list
+    def Remove_element(self):
+        l = self.string.split(self.delimiter)
+        l.pop(self.position)
+        return l
