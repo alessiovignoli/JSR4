@@ -3,8 +3,9 @@
 
 // Modules dependencie section
 
-include { sprql_querier } from "../subworkflows/uniprot_sparql" addParams(column_UN: 9)
 include { sr_prediction } from "../modules/sr_jasper_pred"
+include { sprql_querier } from "../subworkflows/uniprot_sparql" addParams(column_UN: 9)
+include { table_matcher_handler } from "../subworkflows/tabular_match_handler" addParams(pos1_TAB: 8)
 
 
 workflow  sr_input_handler {
@@ -30,27 +31,25 @@ workflow  sr_input_handler {
 	
 
 	infa = Channel.fromPath(fasta_file)
-	//out_filename = (("${fasta_file}".split('/')[-1]).split('\\.')[0]).split('\\*')[0]  + '_sr_pdb.txt'
 	sr_prediction(infa)
 	sprql_querier(sr_prediction.out.sr_jaspar_out)
 	
 
 	// Reconcile the two information in the files above in one through the uniprot ID
+	// first related files from the two above process are put in a tuple as pairs
 
-	sr_prediction.out.sr_jaspar_out.splitText().map{ it -> [(("${it}".trim()).split("\t"))[-1], "${it}".trim()]}.set{ mapped_sr_results }
-	sprql_querier.out.found_pdb.splitText().map{ it -> [(("${it}".trim()).split("\t"))[0], ((("${it}".trim()).split("\t"))[1..3]).join("\t") ]}.set{ mapped_pdb_results }
-	mapped_sr_results.combine( mapped_pdb_results, by: 0 ).set{ matched_lines }
-	
-	// let's add the header line
+	sr_prediction.out.sr_jaspar_out.map{ it -> ["${it.name}".split(".out")[0], it] }.set{ mapped_sr_results }
+	sprql_querier.out.found_pdb.map{ it -> ["${it.name}".split("_pdb.ids")[0], it] }.set{ mapped_sprql_results }
+	mapped_sr_results.combine( mapped_sprql_results, by: 0 ).map{ it -> [ it[1], it[2] ]  }.set{ paired_tabulars }
 
-	header = Channel.of("Query\tTF Name\tTF Matrix\tE-value\tQuery Start-End\tTF Start-End\tDBD\t%ID\tSR_score\tref uniprotID\tpdbID\tchain\tStructure Start-End")
-	matched_lines.map{ it -> [it[1], it[2]].join("\t") }.set{ tmp }
-	header.concat(tmp).collectFile(name: outname_path, storeDir: params.OUTPUT_DIR, newLine: true, sort: false).set{ final_out }
-	
+	// then on the pairs the matcher is called, asking to have just one unique output for all inputs
+
+	table_matcher_handler(paired_tabulars, outname_path)
+	table_matcher_handler.out.output_table.collectFile(storeDir: params.OUTPUT_DIR).set{ final_out }
 
 	emit:
-	final_out = final_out
-	stdout = sprql_querier.out.stout
+	final_out 
+	stdout = table_matcher_handler.out.stdout
 }
 
 
