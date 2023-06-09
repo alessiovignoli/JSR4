@@ -58,7 +58,7 @@ class MatchByKeyPos(TabularLinesMatcher):
     def Match(self):
         key1 = self.line1_extract.Get_Field()
         key2 = self.line2_extract.Get_Field()
-        if key1==key2:
+        if (key1.strip()) == (key2.strip()):
             line2_modified = self.line2_minnus_key.Remove_element()
             return (self.line1.rstrip() + self.delimiter1 + ( self.delimiter1.join(line2_modified) ))
         else:
