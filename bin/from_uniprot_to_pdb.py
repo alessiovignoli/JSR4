@@ -80,8 +80,10 @@ def pdb_SPARQL_query(in_file, out_file, column_num, col_spatiator, skip_1line):
     # Write to file if the option has been given
     if out_file:
         with open(out_file, 'w') as outfile:
+            outfile.write('ref UniprotID\tpdbID\tchain\tStructure Start-End\n')
             outfile.write(to_be_written)
     else:
+        print('ref UniprotID\tpdbID\tchain\tStructure Start-End\n')
         print(to_be_written)
                     
 
