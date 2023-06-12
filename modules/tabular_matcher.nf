@@ -2,7 +2,7 @@
 
 process table_matcher {
 	label 'tabular'
-	tag { "bubba" } 
+	tag { "${outname}" } 
 
 	input:
 	tuple path(infile1), path(infile2), val(outname)
