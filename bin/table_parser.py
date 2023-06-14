@@ -3,7 +3,7 @@
 from file_existance import FileExists
 from tabular import ExtractField
 from count_lines import LineCounter
-
+from file_header import FileHeader
 
 
 class TableParser():
@@ -73,10 +73,11 @@ class PercentageIDs(TableParser):
 
         seen_ids = []
         with open(self.infile, 'r') as in_file:
+            header_obj = FileHeader(in_file, self.id_pos)
+            header_obj.RemoveHeader()
             for line in in_file:
                 extract_obj = ExtractField(line, self.id_pos, self.delimiter)
                 id_value = extract_obj.Get_Field()
-                #print(id_value)
                 seen_ids.append(id_value)
         return seen_ids
 
