@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-from tabular_matcher import MatchByKeyPos
+from python_codebase.tabular_matcher import MatchByKeyPos
 
 def get_args():
 
