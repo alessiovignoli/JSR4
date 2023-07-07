@@ -27,7 +27,7 @@ def main(file_1, file_2, output, pos_1=0, pos_2=0, del1='\t', del2='\t', do_comp
     # Make every file a instance of the correct class
     file1_obj = TabularFile(file_1, del1)
     file_2_obj = TabularFile(file_2, del2)
-    output_obj = TabularFile(output)
+    output_obj = TabularFile(output, del1)
 
     # Call the function that will do the rest
     file1_obj.IntersectTables(file_2_obj, output_obj, pos1=pos_1, pos2=pos_2, compress=do_compress, check_type=check)
